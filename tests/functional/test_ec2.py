@@ -4,7 +4,7 @@
 # may not use this file except in compliance with the License. A copy of
 # the License is located at
 #
-# https://aws.amazon.com/apache2.0/
+# http://aws.amazon.com/apache2.0/
 #
 # or in the "license" file accompanying this file. This file is
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
@@ -23,7 +23,8 @@ class TestInstanceDeleteTags(unittest.TestCase):
         self.instance_resource = self.service_resource.Instance('i-abc123')
 
     def test_delete_tags_injected(self):
-        assert hasattr(self.instance_resource, 'delete_tags')
+        self.assertTrue(hasattr(self.instance_resource, 'delete_tags'),
+                        'delete_tags was not injected onto Instance resource.')
 
     def test_delete_tags(self):
         stubber = Stubber(self.instance_resource.meta.client)
@@ -31,7 +32,7 @@ class TestInstanceDeleteTags(unittest.TestCase):
         stubber.activate()
         response = self.instance_resource.delete_tags(Tags=[{'Key': 'foo'}])
         stubber.assert_no_pending_responses()
-        assert response == {}
+        self.assertEqual(response, {})
         stubber.deactivate()
 
     def test_mutating_filters(self):

@@ -10,7 +10,7 @@
 
 
 #########################
-Bucket CORS configuration
+Bucket CORS Configuration
 #########################
 
 Cross Origin Resource Sharing (CORS) enables client web applications in one 
@@ -19,7 +19,7 @@ to enable cross-origin requests. The configuration defines rules that specify
 the allowed origins, HTTP methods (GET, PUT, etc.), and other elements.
 
 
-Retrieve a bucket CORS configuration
+Retrieve a Bucket CORS Configuration
 ====================================
 
 Retrieve a bucket's CORS configuration by calling the AWS SDK for Python 
@@ -54,7 +54,7 @@ Retrieve a bucket's CORS configuration by calling the AWS SDK for Python
         return response['CORSRules']
 
 
-Set a bucket CORS configuration
+Set a Bucket CORS Configuration
 ===============================
 
 A bucket's CORS configuration can be set by calling the ``put_bucket_cors`` 

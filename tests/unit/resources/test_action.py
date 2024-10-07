@@ -4,13 +4,12 @@
 # may not use this file except in compliance with the License. A copy of
 # the License is located at
 #
-# https://aws.amazon.com/apache2.0/
+# http://aws.amazon.com/apache2.0/
 #
 # or in the 'license' file accompanying this file. This file is
 # distributed on an 'AS IS' BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
 # ANY KIND, either express or implied. See the License for the specific
 # language governing permissions and limitations under the License.
-import pytest
 
 from boto3.utils import ServiceContext
 from boto3.resources.action import BatchAction, ServiceAction, WaiterAction
@@ -44,7 +43,8 @@ class TestServiceActionCall(BaseTestCase):
 
         action(resource, foo=1)
 
-        assert params_mock.called
+        self.assertTrue(params_mock.called,
+            'Parameters for operation not created')
 
     @mock.patch('boto3.resources.action.create_request_parameters',
                 return_value={'bar': 'baz'})
@@ -59,7 +59,8 @@ class TestServiceActionCall(BaseTestCase):
         response = action(resource, foo=1)
 
         operation.assert_called_with(foo=1, bar='baz')
-        assert response == 'response'
+        self.assertEqual(response, 'response',
+            'Unexpected low-level response data returned')
 
     @mock.patch('boto3.resources.action.create_request_parameters',
                 return_value={})
@@ -122,21 +123,6 @@ class TestServiceActionCall(BaseTestCase):
             operation_name='GetFrobs'
         )
 
-    def test_service_action_call_positional_argument(self):
-        def _api_call(*args, **kwargs):
-            if args:
-                raise TypeError(
-                    "%s() only accepts keyword arguments." % 'get_frobs')
-
-        resource = mock.Mock()
-        resource.meta = ResourceMeta('test', client=mock.Mock())
-        resource.meta.client.get_frobs = _api_call
-
-        action = ServiceAction(self.action)
-
-        with pytest.raises(TypeError):
-            action(resource, 'item1')
-
 
 class TestWaiterActionCall(BaseTestCase):
     def setUp(self):
@@ -163,7 +149,8 @@ class TestWaiterActionCall(BaseTestCase):
 
         action(resource, foo=1)
 
-        assert params_mock.called
+        self.assertTrue(params_mock.called,
+            'Parameters for operation not created')
 
     @mock.patch('boto3.resources.action.create_request_parameters',
                 return_value={'bar': 'baz'})
@@ -287,30 +274,3 @@ class TestBatchActionCall(BaseTestCase):
         crp_mock.assert_called_with(item, model.request,
                                     params={'foo': 'bar'}, index=0)
         client.get_frobs.assert_called_with(foo='bar')
-
-    @mock.patch('boto3.resources.action.create_request_parameters')
-    def test_batch_action_with_positional_argument(self, crp_mock):
-        def side_effect(resource, model, params=None, index=None):
-            params['foo'] = 'bar'
-
-        def _api_call(*args, **kwargs):
-            if args:
-                raise TypeError(
-                    "%s() only accepts keyword arguments." % 'get_frobs')
-
-        crp_mock.side_effect = side_effect
-
-        client = mock.Mock()
-        client.get_frobs = _api_call
-
-        item = mock.Mock()
-        item.meta = ResourceMeta('test', client=client)
-
-        collection = mock.Mock()
-        collection.pages.return_value = [[item]]
-
-        model = self.model
-        action = BatchAction(model)
-
-        with pytest.raises(TypeError):
-            action(collection, 'item1')

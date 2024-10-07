@@ -11,7 +11,7 @@
 .. _aws-boto3-sqs-using-queues:   
 
 ##########################
-Using queues in Amazon SQS
+Using Queues in Amazon SQS
 ##########################
 
 This Python example shows you how to:
@@ -22,7 +22,7 @@ This Python example shows you how to:
 
 * Create and delete queues
 
-The scenario
+The Scenario
 ============
 
 In this example, Python code is used to work with queues. The code uses the AWS SDK for Python to use 
@@ -40,7 +40,7 @@ For more information about Amazon SQS messages, see
 `How Queues Work <http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-how-it-works.html>`_ 
 in the *Amazon Simple Queue Service Developer Guide*.
 
-List your queues
+List Your Queues
 ================
 
 The example below shows how to:
@@ -65,7 +65,7 @@ Example
 
 .. _aws-boto3-sqs-create-queue:
 
-Create a queue
+Create a Queue
 ==============
 
 The example below shows how to:
@@ -94,7 +94,7 @@ Example
 
     print(response['QueueUrl'])
 
-Get the URL for a queue
+Get the URL for a Queue
 =======================
 
 The example below shows how to:
@@ -117,7 +117,7 @@ Example
 
     print(response['QueueUrl'])
 
-Delete a queue
+Delete a Queue
 ==============
 
 The example below shows how to:

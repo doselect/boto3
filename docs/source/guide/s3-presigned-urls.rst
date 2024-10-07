@@ -70,7 +70,7 @@ perform a GET request.
         response = requests.get(url)
 
 
-Using presigned URLs to perform other S3 operations
+Using Presigned URLs to Perform Other S3 Operations
 ===================================================
 
 The main purpose of presigned URLs is to grant a user temporary access to an 
@@ -120,7 +120,7 @@ the appropriate method so this argument is not normally required.
         return response
 
 
-Generating a presigned URL to upload a file
+Generating a Presigned URL to Upload a File
 ===========================================
 
 A user who does not have AWS credentials to upload a file can use a 

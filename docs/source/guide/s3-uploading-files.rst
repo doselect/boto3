@@ -10,7 +10,7 @@
 
 
 ###############
-Uploading files
+Uploading Files
 ###############
 
 The AWS SDK for Python provides a pair of methods to upload a file to an S3
@@ -25,7 +25,6 @@ and uploading each chunk in parallel.
     import logging
     import boto3
     from botocore.exceptions import ClientError
-    import os
 
 
     def upload_file(file_name, bucket, object_name=None):
@@ -39,7 +38,7 @@ and uploading each chunk in parallel.
 
         # If S3 object_name was not specified, use file_name
         if object_name is None:
-            object_name = os.path.basename(file_name)
+            object_name = file_name
 
         # Upload the file
         s3_client = boto3.client('s3')
@@ -67,7 +66,7 @@ provided by each class is identical. No benefits are gained by calling one
 class's method over another's. Use whichever class is most convenient.
 
 
-The ExtraArgs parameter
+The ExtraArgs Parameter
 ===========================
 
 Both ``upload_file`` and ``upload_fileobj`` accept an optional ``ExtraArgs`` 
@@ -111,7 +110,7 @@ The ``ExtraArgs`` parameter can also be used to set custom or multiple ACLs.
     )
 
 
-The Callback parameter
+The Callback Parameter
 ==========================
 
 Both ``upload_file`` and ``upload_fileobj`` accept an optional ``Callback`` 

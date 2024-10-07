@@ -4,13 +4,14 @@
 # may not use this file except in compliance with the License. A copy of
 # the License is located at
 #
-# https://aws.amazon.com/apache2.0/
+# http://aws.amazon.com/apache2.0/
 #
 # or in the 'license' file accompanying this file. This file is
 # distributed on an 'AS IS' BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
 # ANY KIND, either express or implied. See the License for the specific
 # language governing permissions and limitations under the License.
-from tests import mock, unittest
+from tests import unittest
+import mock
 
 import boto3.session
 from boto3.ec2 import createtags
@@ -47,16 +48,17 @@ class TestCreateTags(unittest.TestCase):
         self.client.create_tags.assert_called_with(**ref_kwargs)
 
         # Ensure the calls to the Tag reference were correct.
-        assert self.resource.Tag.call_args_list == [
-            mock.call('foo', 'key1', 'value1'),
-            mock.call('foo', 'key2', 'value2'),
-            mock.call('foo', 'key3', 'value3'),
-            mock.call('bar', 'key1', 'value1'),
-            mock.call('bar', 'key2', 'value2'),
-            mock.call('bar', 'key3', 'value3')]
+        self.assertEqual(
+            self.resource.Tag.call_args_list,
+            [mock.call('foo', 'key1', 'value1'),
+             mock.call('foo', 'key2', 'value2'),
+             mock.call('foo', 'key3', 'value3'),
+             mock.call('bar', 'key1', 'value1'),
+             mock.call('bar', 'key2', 'value2'),
+             mock.call('bar', 'key3', 'value3')])
 
         # Ensure the return values are as expected.
-        assert result_tags == self.ref_tags
+        self.assertEqual(result_tags, self.ref_tags)
 
 
 class TestCreateTagsInjection(unittest.TestCase):
@@ -64,5 +66,8 @@ class TestCreateTagsInjection(unittest.TestCase):
         session = boto3.session.Session(region_name='us-west-2')
         with mock.patch('boto3.ec2.createtags.create_tags') as mock_method:
             resource = session.resource('ec2')
-            assert hasattr(resource, 'create_tags')
-            assert resource.create_tags is mock_method
+            self.assertTrue(hasattr(resource, 'create_tags'),
+                            'EC2 resource does not have create_tags method.')
+            self.assertIs(resource.create_tags, mock_method,
+                          'custom create_tags method was not injected onto '
+                          'EC2 service resource')

@@ -4,7 +4,7 @@
 # may not use this file except in compliance with the License. A copy of
 # the License is located at
 #
-# https://aws.amazon.com/apache2.0/
+# http://aws.amazon.com/apache2.0/
 #
 # or in the "license" file accompanying this file. This file is
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
@@ -12,20 +12,19 @@
 # language governing permissions and limitations under the License.
 import copy
 
-import pytest
-
 from tests import unittest
 
-from boto3.exceptions import (
-    DynamoDBOperationNotSupportedError, DynamoDBNeedsConditionError,
-    DynamoDBNeedsKeyConditionError,
-)
-from boto3.dynamodb.conditions import (
-    Attr, Key, And, Or, Not, Equals, LessThan,
-    LessThanEquals, GreaterThan, GreaterThanEquals, BeginsWith, Between,
-    NotEquals, In, AttributeExists, AttributeNotExists, Contains, Size,
-    AttributeType, ConditionExpressionBuilder
-)
+from boto3.exceptions import DynamoDBOperationNotSupportedError
+from boto3.exceptions import DynamoDBNeedsConditionError
+from boto3.exceptions import DynamoDBNeedsKeyConditionError
+from boto3.dynamodb.conditions import Attr, Key
+from boto3.dynamodb.conditions import And, Or, Not, Equals, LessThan
+from boto3.dynamodb.conditions import LessThanEquals, GreaterThan
+from boto3.dynamodb.conditions import GreaterThanEquals, BeginsWith, Between
+from boto3.dynamodb.conditions import NotEquals, In, AttributeExists
+from boto3.dynamodb.conditions import AttributeNotExists, Contains, Size
+from boto3.dynamodb.conditions import AttributeType
+from boto3.dynamodb.conditions import ConditionExpressionBuilder
 
 
 class TestK(unittest.TestCase):
@@ -36,92 +35,100 @@ class TestK(unittest.TestCase):
         self.value2 = 'foo2'
 
     def test_and(self):
-        with pytest.raises(DynamoDBOperationNotSupportedError, match=r'AND'):
+        with self.assertRaisesRegexp(
+                DynamoDBOperationNotSupportedError, 'AND'):
             self.attr & self.attr2
 
     def test_or(self):
-        with pytest.raises(DynamoDBOperationNotSupportedError, match=r'OR'):
+        with self.assertRaisesRegexp(
+                DynamoDBOperationNotSupportedError, 'OR'):
             self.attr | self.attr2
 
     def test_not(self):
-        with pytest.raises(DynamoDBOperationNotSupportedError, match=r'NOT'):
+        with self.assertRaisesRegexp(
+                DynamoDBOperationNotSupportedError, 'NOT'):
             ~self.attr
 
     def test_eq(self):
-        assert self.attr.eq(self.value) == Equals(self.attr, self.value)
+        self.assertEqual(
+            self.attr.eq(self.value), Equals(self.attr, self.value))
 
     def test_lt(self):
-        assert self.attr.lt(self.value) == LessThan(self.attr, self.value)
+        self.assertEqual(
+            self.attr.lt(self.value), LessThan(self.attr, self.value))
 
     def test_lte(self):
-        assert self.attr.lte(self.value) == LessThanEquals(
-            self.attr, self.value)
+        self.assertEqual(
+            self.attr.lte(self.value), LessThanEquals(self.attr, self.value))
 
     def test_gt(self):
-        assert self.attr.gt(self.value) == GreaterThan(self.attr, self.value)
+        self.assertEqual(
+            self.attr.gt(self.value), GreaterThan(self.attr, self.value))
 
     def test_gte(self):
-        assert self.attr.gte(self.value) == GreaterThanEquals(
-            self.attr, self.value)
+        self.assertEqual(
+            self.attr.gte(self.value),
+            GreaterThanEquals(self.attr, self.value))
 
     def test_begins_with(self):
-        assert self.attr.begins_with(self.value) == BeginsWith(
-            self.attr, self.value)
+        self.assertEqual(self.attr.begins_with(self.value),
+                         BeginsWith(self.attr, self.value))
 
     def test_between(self):
-        assert self.attr.between(self.value, self.value2) == Between(
-            self.attr, self.value, self.value2)
+        self.assertEqual(self.attr.between(self.value, self.value2),
+                         Between(self.attr, self.value, self.value2))
 
     def test_attribute_equality(self):
         attr_copy = copy.deepcopy(self.attr)
-        assert self.attr is not attr_copy
-        assert self.attr == attr_copy
+        self.assertIsNot(self.attr, attr_copy)
+        self.assertEqual(self.attr, attr_copy)
 
     def test_eq_equality(self):
         attr_copy = copy.deepcopy(self.attr)
         comp = self.attr.eq(self.value)
         comp2 = attr_copy.eq(self.value)
-        assert comp == comp2
+        self.assertEqual(comp, comp2)
 
     def test_eq_inequality(self):
         attr_copy = copy.deepcopy(self.attr)
-        assert self.attr.eq(self.value) != attr_copy.eq(self.value2)
+        self.assertNotEqual(self.attr.eq(self.value),
+                            attr_copy.eq(self.value2))
 
     def test_lt_equality(self):
         attr_copy = copy.deepcopy(self.attr)
         comp = self.attr.lt(self.value)
         comp2 = attr_copy.lt(self.value)
-        assert comp == comp2
+        self.assertEqual(comp, comp2)
 
     def test_lte_equality(self):
         attr_copy = copy.deepcopy(self.attr)
         comp = self.attr.lte(self.value)
         comp2 = attr_copy.lte(self.value)
-        assert comp == comp2
+        self.assertEqual(comp, comp2)
 
     def test_gt_equality(self):
         attr_copy = copy.deepcopy(self.attr)
         comp = self.attr.gt(self.value)
         comp2 = attr_copy.gt(self.value)
-        assert comp == comp2
+        self.assertEqual(comp, comp2)
 
     def test_gte_equality(self):
         attr_copy = copy.deepcopy(self.attr)
         comp = self.attr.gte(self.value)
         comp2 = attr_copy.gte(self.value)
-        assert comp == comp2
+        self.assertEqual(comp, comp2)
 
     def test_begins_with_equality(self):
         attr_copy = copy.deepcopy(self.attr)
         comp = self.attr.begins_with(self.value)
         comp2 = attr_copy.begins_with(self.value)
-        assert comp == comp2
+        self.assertEqual(comp, comp2)
 
     def test_between_equality(self):
         attr_copy = copy.deepcopy(self.attr)
         comp = self.attr.between(self.value, self.value2)
         comp2 = attr_copy.between(self.value, self.value2)
-        assert comp == comp2
+        self.assertEqual(comp, comp2)
 
 
 class TestA(TestK):
@@ -132,68 +139,71 @@ class TestA(TestK):
         self.value2 = 'foo2'
 
     def test_ne(self):
-        assert self.attr.ne(self.value) == NotEquals(self.attr, self.value)
+        self.assertEqual(self.attr.ne(self.value),
+                         NotEquals(self.attr, self.value))
 
     def test_is_in(self):
-        assert self.attr.is_in([self.value]) == In(self.attr, [self.value])
+        self.assertEqual(self.attr.is_in([self.value]),
+                         In(self.attr, [self.value]))
 
     def test_exists(self):
-        assert self.attr.exists() == AttributeExists(self.attr)
+        self.assertEqual(self.attr.exists(), AttributeExists(self.attr))
 
     def test_not_exists(self):
-        assert self.attr.not_exists() == AttributeNotExists(self.attr)
+        self.assertEqual(self.attr.not_exists(), AttributeNotExists(self.attr))
 
     def test_contains(self):
-        assert self.attr.contains(self.value) == Contains(self.attr, self.value)
+        self.assertEqual(self.attr.contains(self.value),
+                         Contains(self.attr, self.value))
 
     def test_size(self):
-        assert self.attr.size() == Size(self.attr)
+        self.assertEqual(self.attr.size(), Size(self.attr))
 
     def test_attribute_type(self):
-        assert self.attr.attribute_type(self.value) == AttributeType(
-            self.attr, self.value)
+        self.assertEqual(self.attr.attribute_type(self.value),
+                         AttributeType(self.attr, self.value))
 
     def test_ne_equality(self):
         attr_copy = copy.deepcopy(self.attr)
         comp = self.attr.ne(self.value)
         comp2 = attr_copy.ne(self.value)
-        assert comp == comp2
+        self.assertEqual(comp, comp2)
 
     def test_is_in_equality(self):
         attr_copy = copy.deepcopy(self.attr)
         comp = self.attr.is_in([self.value])
         comp2 = attr_copy.is_in([self.value])
-        assert comp == comp2
+        self.assertEqual(comp, comp2)
 
     def test_exists_equality(self):
         attr_copy = copy.deepcopy(self.attr)
         comp = self.attr.exists()
         comp2 = attr_copy.exists()
-        assert comp == comp2
+        self.assertEqual(comp, comp2)
 
     def test_not_exists_equality(self):
         attr_copy = copy.deepcopy(self.attr)
         comp = self.attr.not_exists()
         comp2 = attr_copy.not_exists()
-        assert comp == comp2
+        self.assertEqual(comp, comp2)
 
     def test_contains_equality(self):
         attr_copy = copy.deepcopy(self.attr)
         comp = self.attr.contains(self.value)
         comp2 = attr_copy.contains(self.value)
-        assert comp == comp2
+        self.assertEqual(comp, comp2)
 
     def test_size_equality(self):
         attr_copy = copy.deepcopy(self.attr)
         comp = self.attr.size()
         comp2 = attr_copy.size()
-        assert comp == comp2
+        self.assertEqual(comp, comp2)
 
     def test_attribute_type_equality(self):
         attr_copy = copy.deepcopy(self.attr)
         comp = self.attr.attribute_type(self.value)
         comp2 = attr_copy.attribute_type(self.value)
-        assert comp == comp2
+        self.assertEqual(comp, comp2)
 
 
 class TestConditions(unittest.TestCase):
@@ -204,51 +214,53 @@ class TestConditions(unittest.TestCase):
     def build_and_assert_expression(self, condition,
                                     reference_expression_dict):
         expression_dict = condition.get_expression()
-        assert expression_dict == reference_expression_dict
+        self.assertDictEqual(expression_dict, reference_expression_dict)
 
     def test_equal_operator(self):
         cond1 = Equals(self.value, self.value2)
         cond2 = Equals(self.value, self.value2)
-        assert cond1 == cond2
+        self.assertTrue(cond1 == cond2)
 
     def test_equal_operator_type(self):
         cond1 = Equals(self.value, self.value2)
         cond2 = NotEquals(self.value, self.value2)
-        assert cond1 != cond2
+        self.assertFalse(cond1 == cond2)
 
     def test_equal_operator_value(self):
         cond1 = Equals(self.value, self.value2)
         cond2 = Equals(self.value, self.value)
-        assert cond1 != cond2
+        self.assertFalse(cond1 == cond2)
 
     def test_not_equal_operator(self):
         cond1 = Equals(self.value, self.value2)
         cond2 = NotEquals(self.value, self.value)
-        assert cond1 != cond2
+        self.assertTrue(cond1 != cond2)
 
     def test_and_operator(self):
         cond1 = Equals(self.value, self.value2)
         cond2 = Equals(self.value, self.value2)
-        assert cond1 & cond2 == And(cond1, cond2)
+        self.assertEqual(cond1 & cond2, And(cond1, cond2))
 
     def test_and_operator_throws_excepetion(self):
         cond1 = Equals(self.value, self.value2)
-        with pytest.raises(DynamoDBOperationNotSupportedError, match=r'AND'):
+        with self.assertRaisesRegexp(
+                DynamoDBOperationNotSupportedError, 'AND'):
             cond1 & self.value2
 
     def test_or_operator(self):
         cond1 = Equals(self.value, self.value2)
         cond2 = Equals(self.value, self.value2)
-        assert cond1 | cond2 == Or(cond1, cond2)
+        self.assertEqual(cond1 | cond2, Or(cond1, cond2))
 
     def test_or_operator_throws_excepetion(self):
         cond1 = Equals(self.value, self.value2)
-        with pytest.raises(DynamoDBOperationNotSupportedError, match=r'OR'):
+        with self.assertRaisesRegexp(
+                DynamoDBOperationNotSupportedError, 'OR'):
             cond1 | self.value2
 
     def test_not_operator(self):
         cond1 = Equals(self.value, self.value2)
-        assert ~cond1 == Not(cond1)
+        self.assertEqual(~cond1, Not(cond1))
 
     def test_eq(self):
         self.build_and_assert_expression(
@@ -292,7 +304,7 @@ class TestConditions(unittest.TestCase):
             cond,
             {'format': '{0} {operator} {1}',
              'operator': 'IN', 'values': (self.value, (self.value2))})
-        assert cond.has_grouped_values
+        self.assertTrue(cond.has_grouped_values)
 
     def test_bet(self):
         self.build_and_assert_expression(
@@ -389,13 +401,13 @@ class TestConditionExpressionBuilder(unittest.TestCase):
             is_key_condition=False):
         exp_string, names, values = self.builder.build_expression(
             condition, is_key_condition=is_key_condition)
-        assert exp_string == ref_string
-        assert names == ref_names
-        assert values == ref_values
+        self.assertEqual(exp_string, ref_string)
+        self.assertEqual(names, ref_names)
+        self.assertEqual(values, ref_values)
 
     def test_bad_input(self):
         a = Attr('myattr')
-        with pytest.raises(DynamoDBNeedsConditionError):
+        with self.assertRaises(DynamoDBNeedsConditionError):
             self.builder.build_expression(a)
 
     def test_build_expression_eq(self):
@@ -525,7 +537,7 @@ class TestConditionExpressionBuilder(unittest.TestCase):
 
     def test_build_with_is_key_condition_throws_error(self):
         a = Attr('myattr')
-        with pytest.raises(DynamoDBNeedsKeyConditionError):
+        with self.assertRaises(DynamoDBNeedsKeyConditionError):
             self.builder.build_expression(a.eq('foo'), is_key_condition=True)
 
     def test_build_attr_map(self):

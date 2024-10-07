@@ -1,12 +1,12 @@
 .. _ref_custom_dynamodb:
 
 ================================
-DynamoDB customization reference
+DynamoDB Customization Reference
 ================================
 
 .. _ref_valid_dynamodb_types:
 
-Valid DynamoDB types
+Valid DynamoDB Types
 --------------------
 
 These are the valid item types to use with Boto3 Table Resource (:py:class:`dynamodb.Table`) and DynamoDB:
@@ -40,7 +40,7 @@ These are the valid item types to use with Boto3 Table Resource (:py:class:`dyna
 +----------------------------------------------+-----------------------------+
 
 
-Custom Boto3 types
+Custom Boto3 Types
 ------------------
 
 
@@ -50,7 +50,7 @@ Custom Boto3 types
 
 .. _ref_dynamodb_conditions:
 
-DynamoDB conditions
+DynamoDB Conditions
 -------------------
 
 .. autoclass:: boto3.dynamodb.conditions.Key

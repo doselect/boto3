@@ -11,12 +11,12 @@
 .. _aws-boto3-iam-managing-access-keys:   
 
 ########################
-Managing IAM access keys
+Managing IAM Access Keys
 ########################
 
 This Python example shows you how to manage the access keys of your users.
 
-The scenario
+The Scenario
 ============
 
 Users need their own access keys to make programmatic calls to AWS from the Amazon Web Services (AWS) 
@@ -43,12 +43,12 @@ in the *IAM User Guide*.
 
 All the example code for the Amazon Web Services (AWS) SDK for Python is available `here on GitHub <https://github.com/awsdocs/aws-doc-sdk-examples/tree/master/python/example_code>`_.
 
-Prerequisite tasks
+Prerequisite Task
 =================
 
 To set up and run this example, you must first configure your AWS credentials, as described in :doc:`quickstart`.
 
-Create access keys for a user
+Create Access Keys for a User
 =============================
 
 Create a new AWS secret access key and corresponding AWS access key ID for the specified user. The 
@@ -76,7 +76,7 @@ Example
 
     print(response['AccessKey'])
 
-List a user's access keys
+List a User's Access Keys
 =========================
 
 List information about the access key IDs associated with the specified IAM user. If there are none, 
@@ -109,7 +109,7 @@ Example
         print(response)
 
 
-Get the access key last used
+Get the Access Key Last Used
 ============================
 
 Get information about when the specified access key was last used. The information includes the 
@@ -141,7 +141,7 @@ Example
 
 
  
-Update access key status
+Update Access Key Status
 ========================
 
 Change the status of the specified access key from Active to Inactive, or vice versa. This action 
@@ -170,7 +170,7 @@ Example
     )
 
     
-Delete an access key
+Delete an Access Key
 ====================
 
 Delete the access key pair associated with the specified IAM user.

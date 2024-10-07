@@ -11,7 +11,7 @@
 .. _aws-boto3-kms-examples:
 
 #############################################
-AWS Key Management Service (AWS KMS) examples
+AWS Key Management Service (AWS KMS) Examples
 #############################################
 
 .. meta::

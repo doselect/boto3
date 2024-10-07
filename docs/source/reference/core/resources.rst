@@ -1,10 +1,10 @@
 .. _ref_core_resources:
 
 ===================
-Resources reference
+Resources Reference
 ===================
 
-Resource model
+Resource Model
 --------------
 
 .. automodule:: boto3.resources.model
@@ -12,35 +12,35 @@ Resource model
    :undoc-members:
    :inherited-members:
 
-Request parameters
+Request Parameters
 ------------------
 
 .. automodule:: boto3.resources.params
    :members:
    :undoc-members:
 
-Response handlers
+Response Handlers
 -----------------
 
 .. automodule:: boto3.resources.response
    :members:
    :undoc-members:
 
-Resource actions
+Resource Actions
 ----------------
 
 .. automodule:: boto3.resources.action
    :members:
    :undoc-members:
 
-Resource base
+Resource Base
 -------------
 
 .. automodule:: boto3.resources.base
    :members:
    :undoc-members:
 
-Resource factory
+Resource Factory
 ----------------
 
 .. automodule:: boto3.resources.factory

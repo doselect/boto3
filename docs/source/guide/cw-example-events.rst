@@ -11,7 +11,7 @@
 .. _aws-boto3-cw-events:   
 
 ##########################################
-Sending events to Amazon CloudWatch Events
+Sending Events to Amazon CloudWatch Events
 ##########################################
 
 This Python example shows you how to:
@@ -22,7 +22,7 @@ This Python example shows you how to:
 
 * Send events that are matched to targets for handling
 
-The scenario
+The Scenario
 ============
 
 CloudWatch Events delivers a near real-time stream of system events that describe changes in 
@@ -44,7 +44,7 @@ in the *Amazon CloudWatch Events User Guide*.
 
 All the example code for the Amazon Web Services (AWS) SDK for Python is available `here on GitHub <https://github.com/awsdocs/aws-doc-sdk-examples/tree/master/python/example_code>`_.
 
-Prerequisite tasks
+Prerequisite Task
 =================
 
 * Configure your AWS credentials, as described in :doc:`quickstart`.
@@ -98,7 +98,7 @@ Use the following trust relationship when creating the IAM role.
         }
 
 
-Create a scheduled rule
+Create a Scheduled Rule
 =======================
 
 Create or update the specified rule. Rules are enabled by default, or based on value of the state. 
@@ -131,8 +131,8 @@ Example
     print(response['RuleArn'])
 
  
-Add an AWS Lambda function target
-=================================
+Add a Lambda Function Target
+============================
 
 Add the specified targets to the specified rule, or update the targets if they are already 
 associated with the rule.
@@ -166,7 +166,7 @@ Example
     print(response)
 
  
-Send events
+Send Events
 ===========
 
 Send custom events to Amazon CloudWatch Events so that they can be matched to rules.

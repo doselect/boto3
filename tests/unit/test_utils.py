@@ -4,16 +4,15 @@
 # may not use this file except in compliance with the License. A copy of
 # the License is located at
 #
-# https://aws.amazon.com/apache2.0/
+# http://aws.amazon.com/apache2.0/
 #
 # or in the "license" file accompanying this file. This file is
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
 # ANY KIND, either express or implied. See the License for the specific
 # language governing permissions and limitations under the License.
 import types
-from tests import mock, unittest
-
-import pytest
+from tests import unittest
+import mock
 
 from boto3 import utils
 
@@ -30,21 +29,21 @@ class TestUtils(unittest.TestCase):
             importer.return_value = FakeModule
             lazy_function = utils.lazy_call(
                 'fakemodule.FakeModule.entry_point')
-            assert lazy_function(a=1, b=2) == {'a': 1, 'b': 2}
+            self.assertEqual(lazy_function(a=1, b=2), {'a': 1, 'b': 2})
 
     def test_import_module(self):
         module = utils.import_module('boto3.s3.transfer')
-        assert module.__name__ == 'boto3.s3.transfer'
-        assert isinstance(module, types.ModuleType)
+        self.assertEqual(module.__name__, 'boto3.s3.transfer')
+        self.assertIsInstance(module, types.ModuleType)
 
     def test_inject_attributes_with_no_shadowing(self):
         class_attributes = {}
         utils.inject_attribute(class_attributes, 'foo', 'bar')
-        assert class_attributes['foo'] == 'bar'
+        self.assertEqual(class_attributes['foo'], 'bar')
 
     def test_shadowing_existing_var_raises_exception(self):
         class_attributes = {'foo': 'preexisting'}
-        with pytest.raises(RuntimeError):
+        with self.assertRaises(RuntimeError):
             utils.inject_attribute(class_attributes, 'foo', 'bar')
 
 
@@ -53,8 +52,8 @@ class TestLazyLoadedWaiterModel(unittest.TestCase):
         session = mock.Mock()
         waiter_model = utils.LazyLoadedWaiterModel(
             session, 'myservice', '2014-01-01')
-        assert not session.get_waiter_model.called
+        self.assertFalse(session.get_waiter_model.called)
         waiter_model.get_waiter('Foo')
-        assert session.get_waiter_model.called
+        self.assertTrue(session.get_waiter_model.called)
         session.get_waiter_model.return_value.get_waiter.assert_called_with(
             'Foo')

@@ -4,17 +4,16 @@
 # may not use this file except in compliance with the License. A copy of
 # the License is located at
 #
-# https://aws.amazon.com/apache2.0/
+# http://aws.amazon.com/apache2.0/
 #
 # or in the "license" file accompanying this file. This file is
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
 # ANY KIND, either express or implied. See the License for the specific
 # language governing permissions and limitations under the License.
-import pytest
-
 from tests import unittest
 
 import botocore.session
+
 
 from boto3 import utils
 import boto3.session
@@ -31,7 +30,7 @@ class TestUtils(unittest.TestCase):
 
         botocore_session.register('creating-client-class', shadows_put_object)
 
-        with pytest.raises(RuntimeError):
+        with self.assertRaises(RuntimeError):
             # This should raise an exception because we're trying to
             # shadow the put_object client method in the
             # shadows_put_object handler above.

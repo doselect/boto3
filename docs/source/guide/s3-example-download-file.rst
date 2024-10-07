@@ -10,7 +10,7 @@
 
 
 #################
-Downloading files
+Downloading Files
 #################
 
 The methods provided by the AWS SDK for Python to download files are similar 

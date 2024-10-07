@@ -1,7 +1,7 @@
 .. _ref_core_init:
 
 ===============
-Boto3 reference
+Boto3 Reference
 ===============
 
 .. automodule:: boto3

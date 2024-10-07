@@ -11,7 +11,7 @@
 .. _aws-boto3-ses-template:   
 
 ###############################################
-Creating custom email templates with Amazon SES
+Creating Custom Email Templates with Amazon SES
 ###############################################
 
 .. meta::
@@ -36,14 +36,14 @@ The following examples show how to:
 * Remove an email template using `delete_template() <https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ses.html#SES.Client.delete_template>`_.
 * Send a templated email using `send_templated_email() <https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ses.html#SES.Client.send_templated_email>`_.
 
-Prerequisite tasks
+Prerequisite Tasks
 ==================
 
 To set up and run this example, you must first complete these tasks:
 
 * Configure your AWS credentials, as described in :doc:`quickstart`.
 
-Create an email template
+Create an Email Template
 ========================
 
 To create a template to send personalized email messages, use the 
@@ -77,7 +77,7 @@ Example
 
     print(response)
 
-Get an email template
+Get an Email Template
 =====================
 
 To view the content for an existing email template including the subject line, HTML body, and plain text, use the `GetTemplate <https://docs.aws.amazon.com/ses/latest/APIReference/API_GetTemplate.html>`_ operation. Only TemplateName is required.
@@ -98,7 +98,7 @@ Example
 
     print(response)
 
-List all email templates
+List All Email Templates
 ========================
 
 To retrieve a list of all email templates that are associated with your AWS account in the current AWS Region, use the `ListTemplates <https://docs.aws.amazon.com/ses/latest/APIReference/API_ListTemplates.html>`_ operation.
@@ -120,7 +120,7 @@ Example
     print(response)
 
 
-Update an email template
+Update an Email Template
 ========================
 
 To change the content for a specific email template including the subject line, HTML body, and plain text, use the `UpdateTemplate <https://docs.aws.amazon.com/ses/latest/APIReference/API_UpdateTemplate.html>`_ operation.
@@ -146,7 +146,7 @@ Example
     
     print(response)
    
-Send an email with a template
+Send an Email with a Template
 =============================
 
 To use a template to send an email to recipients, use the `SendTemplatedEmail <https://docs.aws.amazon.com/ses/latest/APIReference/API_SendTemplatedEmail.html>`__ operation.

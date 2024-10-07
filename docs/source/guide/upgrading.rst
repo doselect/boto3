@@ -1,5 +1,5 @@
 ===============
-Upgrading notes
+Upgrading Notes
 ===============
 
 Notes to refer to when upgrading ``boto3`` versions.
@@ -7,13 +7,13 @@ Notes to refer to when upgrading ``boto3`` versions.
 1.9.0
 -----
 
-What changed
+What Changed
 ~~~~~~~~~~~~
 
 The boto3 event system was changed to emit events based on the service id
 rather than the endpoint prefix or service name.
 
-Why was the change made
+Why Was The Change Was Made
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This was done to handle several issues that were becoming increasingly
@@ -27,7 +27,7 @@ problematic:
 * Services whose client name and endpoint prefix differed would require two
   different strings if you want to register against all events.
 
-How do I know if I'm impacted
+How Do I Know If I'm Impacted
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Any users relying on registering an event against one service impacting other
@@ -63,7 +63,7 @@ without shared endpoints we do the work of translating the event name at
 registration and emission time. In future versions of boto3 we will remove
 this translation, so you may wish to update your code anyway.
 
-How do I update my code
+How Do I Update My Code
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 You will need to look at the events you are registering against and determine

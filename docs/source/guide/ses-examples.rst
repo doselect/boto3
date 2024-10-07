@@ -12,7 +12,7 @@
 
 
 ###################
-Amazon SES examples
+Amazon SES Examples
 ###################
 
 .. meta::
@@ -29,9 +29,9 @@ addresses and domains. For more information about Amazon SES, see the
 .. toctree::
    :maxdepth: 1
 
-   Verifying email addresses <ses-verify>
-   Working with email templates <ses-template>
-   Managing email filters <ses-filters>
-   Using email rules <ses-rules>
+   Verifying Email Addresses <ses-verify>
+   Working with Email Templates <ses-template>
+   Managing Email Filters <ses-filters>
+   Using Email Rules <ses-rules>
 
    

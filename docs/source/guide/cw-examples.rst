@@ -11,7 +11,7 @@
 .. _aws-boto3-cw-examples:
 
 ##########################
-Amazon CloudWatch examples
+Amazon CloudWatch Examples
 ##########################
 
 You can use the following examples to access Amazon Cloudwatch (CloudWatch) by using Amazon Boto. For more

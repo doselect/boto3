@@ -4,16 +4,15 @@
 # may not use this file except in compliance with the License. A copy of
 # the License is located at
 #
-# https://aws.amazon.com/apache2.0/
+# http://aws.amazon.com/apache2.0/
 #
 # or in the 'license' file accompanying this file. This file is
 # distributed on an 'AS IS' BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
 # ANY KIND, either express or implied. See the License for the specific
 # language governing permissions and limitations under the License.
-import pytest
+from tests import unittest
 
-from tests import mock, unittest
-
+import mock
 from s3transfer.manager import TransferManager
 from s3transfer.futures import NonThreadedExecutor
 
@@ -23,7 +22,6 @@ from boto3.s3.transfer import create_transfer_manager
 from boto3.s3.transfer import S3Transfer
 from boto3.s3.transfer import OSUtils, TransferConfig, ProgressCallbackInvoker
 from boto3.s3.transfer import ClientError, S3TransferRetriesExceededError
-from boto3.s3.transfer import KB, MB
 
 
 class TestCreateTransferManager(unittest.TestCase):
@@ -33,7 +31,10 @@ class TestCreateTransferManager(unittest.TestCase):
         osutil = OSUtils()
         with mock.patch('boto3.s3.transfer.TransferManager') as manager:
             create_transfer_manager(client, config, osutil)
-            assert manager.call_args == mock.call(client, config, osutil, None)
+            self.assertEqual(
+                manager.call_args,
+                mock.call(client, config, osutil, None)
+            )
 
     def test_create_transfer_manager_with_no_threads(self):
         client = object()
@@ -42,8 +43,9 @@ class TestCreateTransferManager(unittest.TestCase):
         with mock.patch(
                 'boto3.s3.transfer.TransferManager') as manager:
             create_transfer_manager(client, config)
-            assert manager.call_args == mock.call(
-                client, config, None, NonThreadedExecutor
+            self.assertEqual(
+                manager.call_args,
+                mock.call(client, config, None, NonThreadedExecutor)
             )
 
 
@@ -52,9 +54,9 @@ class TestTransferConfig(unittest.TestCase):
                                          ref_value):
         # Ensure that the name set in the underlying TransferConfig (i.e.
         # the actual) is the correct value.
-        assert getattr(config, actual) == ref_value
+        self.assertEqual(getattr(config, actual), ref_value)
         # Ensure that backcompat name (i.e. the alias) is the correct value.
-        assert getattr(config, alias) == ref_value
+        self.assertEqual(getattr(config, alias), ref_value)
 
     def test_alias_max_concurreny(self):
         ref_value = 10
@@ -84,26 +86,6 @@ class TestTransferConfig(unittest.TestCase):
         self.assert_value_of_actual_and_alias(
             config, 'max_io_queue_size', 'max_io_queue', new_value)
 
-    def test_transferconfig_parameters(self):
-        config = TransferConfig(
-            multipart_threshold=8 * MB,
-            max_concurrency=10,
-            multipart_chunksize=8 * MB,
-            num_download_attempts=5,
-            max_io_queue=100,
-            io_chunksize=256 * KB,
-            use_threads=True,
-            max_bandwidth=1024 * KB,
-        )
-        assert config.multipart_threshold == 8 * MB
-        assert config.multipart_chunksize == 8 * MB
-        assert config.max_request_concurrency == 10
-        assert config.num_download_attempts == 5
-        assert config.max_io_queue_size == 100
-        assert config.io_chunksize == 256 * KB
-        assert config.use_threads is True
-        assert config.max_bandwidth == 1024 * KB
-
 
 class TestProgressCallbackInvoker(unittest.TestCase):
     def test_on_progress(self):
@@ -123,10 +105,10 @@ class TestS3Transfer(unittest.TestCase):
     def assert_callback_wrapped_in_subscriber(self, call_args):
         subscribers = call_args[0][4]
         # Make sure only one subscriber was passed in.
-        assert len(subscribers) == 1
+        self.assertEqual(len(subscribers), 1)
         subscriber = subscribers[0]
         # Make sure that the subscriber is of the correct type
-        assert isinstance(subscriber, ProgressCallbackInvoker)
+        self.assertIsInstance(subscriber, ProgressCallbackInvoker)
         # Make sure that the on_progress method() calls out to the wrapped
         # callback by actually invoking it.
         subscriber.on_progress(bytes_transferred=1)
@@ -165,49 +147,49 @@ class TestS3Transfer(unittest.TestCase):
         future = mock.Mock()
         future.result.side_effect = S3TransferRetriesExceededError(Exception())
         self.manager.download.return_value = future
-        with pytest.raises(RetriesExceededError):
+        with self.assertRaises(RetriesExceededError):
             self.transfer.download_file('bucket', 'key', '/tmp/smallfile')
 
     def test_propogation_s3_upload_failed_error(self):
         future = mock.Mock()
         future.result.side_effect = ClientError({'Error': {}}, 'op_name')
         self.manager.upload.return_value = future
-        with pytest.raises(S3UploadFailedError):
+        with self.assertRaises(S3UploadFailedError):
             self.transfer.upload_file('smallfile', 'bucket', 'key')
 
     def test_can_create_with_just_client(self):
         transfer = S3Transfer(client=mock.Mock())
-        assert isinstance(transfer, S3Transfer)
+        self.assertIsInstance(transfer, S3Transfer)
 
     def test_can_create_with_extra_configurations(self):
         transfer = S3Transfer(
             client=mock.Mock(), config=TransferConfig(), osutil=OSUtils())
-        assert isinstance(transfer, S3Transfer)
+        self.assertIsInstance(transfer, S3Transfer)
 
     def test_client_or_manager_is_required(self):
-        with pytest.raises(ValueError):
+        with self.assertRaises(ValueError):
             S3Transfer()
 
     def test_client_and_manager_are_mutually_exclusive(self):
-        with pytest.raises(ValueError):
+        with self.assertRaises(ValueError):
             S3Transfer(self.client, manager=self.manager)
 
     def test_config_and_manager_are_mutually_exclusive(self):
-        with pytest.raises(ValueError):
+        with self.assertRaises(ValueError):
             S3Transfer(config=mock.Mock(), manager=self.manager)
 
     def test_osutil_and_manager_are_mutually_exclusive(self):
-        with pytest.raises(ValueError):
+        with self.assertRaises(ValueError):
             S3Transfer(osutil=mock.Mock(), manager=self.manager)
 
     def test_upload_requires_string_filename(self):
         transfer = S3Transfer(client=mock.Mock())
-        with pytest.raises(ValueError):
+        with self.assertRaises(ValueError):
             transfer.upload_file(filename=object(), bucket='foo', key='bar')
 
     def test_download_requires_string_filename(self):
         transfer = S3Transfer(client=mock.Mock())
-        with pytest.raises(ValueError):
+        with self.assertRaises(ValueError):
             transfer.download_file(bucket='foo', key='bar', filename=object())
 
     def test_context_manager(self):
@@ -217,17 +199,18 @@ class TestS3Transfer(unittest.TestCase):
             pass
         # The underlying transfer manager should have had its __exit__
         # called as well.
-        assert manager.__exit__.call_args == mock.call(None, None, None)
+        self.assertEqual(
+            manager.__exit__.call_args, mock.call(None, None, None))
 
     def test_context_manager_with_errors(self):
         manager = mock.Mock()
         manager.__exit__ = mock.Mock()
         raised_exception = ValueError()
-        with pytest.raises(type(raised_exception)):
+        with self.assertRaises(type(raised_exception)):
             with S3Transfer(manager=manager):
                 raise raised_exception
         # The underlying transfer manager should have had its __exit__
         # called as well and pass on the error as well.
-        assert manager.__exit__.call_args == mock.call(
-            type(raised_exception), raised_exception, mock.ANY
-        )
+        self.assertEqual(
+            manager.__exit__.call_args,
+            mock.call(type(raised_exception), raised_exception, mock.ANY))

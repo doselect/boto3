@@ -1,7 +1,7 @@
 .. _ref_core_collections:
 
 =====================
-Collections reference
+Collections Reference
 =====================
 
 .. automodule:: boto3.resources.collection

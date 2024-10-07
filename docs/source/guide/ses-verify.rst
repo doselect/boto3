@@ -12,7 +12,7 @@
 
 
 ############################################
-Verifying email identities in Amazon SES
+Verifying Email Identities in Amazon SES
 ############################################
 
 .. meta::
@@ -32,7 +32,7 @@ The following examples show how to:
 * List all email addresses or domains using `list_identities() <https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ses.html#SES.Client.list_identities>`__.
 * Remove an email address or domain using `delete_identity() <https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ses.html#SES.Client.delete_identity>`__.
 
-Prerequisite tasks
+Prerequisite Tasks
 ==================
 
 To set up and run this example, you must first complete these tasks:
@@ -40,7 +40,7 @@ To set up and run this example, you must first complete these tasks:
 * Configure your AWS credentials, as described in :doc:`quickstart`.
 
 
-Verify an email address
+Verify an Email Address
 =======================
 SES can send email only from verified email addresses or domains. By 
 verifying an email address, you demonstrate that you're the owner of that 
@@ -71,7 +71,7 @@ Example
     print(response)
 
 
-Verify an email domain
+Verify an Email Domain
 ======================
 
 SES can send email only from verified email addresses or domains. By verifying 
@@ -104,7 +104,7 @@ Example
     print(response)
 
 
-List email addresses
+List Email Addresses
 ====================
 
 To retrieve a list of email addresses submitted in the current AWS Region, 
@@ -130,7 +130,7 @@ Example
     print(response)
 
 
-List email domains
+List Email Domains
 ==================
 
 To retrieve a list of email domains submitted in the current AWS Region, 
@@ -156,7 +156,7 @@ Example
     print(response)
 
 
-Delete an email address
+Delete an Email Address
 =======================
 
 To delete a verified email address from the list of verified identities, use 
@@ -180,7 +180,7 @@ Example
     print(response)
 
 
-Delete an email domain
+Delete an Email Domain
 ======================
 
 To delete a verified email domain from the list of verified identities, use the 

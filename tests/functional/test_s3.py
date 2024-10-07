@@ -4,14 +4,12 @@
 # may not use this file except in compliance with the License. A copy of
 # the License is located at
 #
-# https://aws.amazon.com/apache2.0/
+# http://aws.amazon.com/apache2.0/
 #
 # or in the "license" file accompanying this file. This file is
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
 # ANY KIND, either express or implied. See the License for the specific
 # language governing permissions and limitations under the License.
-import pytest
-
 from tests import unittest
 
 import botocore
@@ -28,26 +26,36 @@ class TestS3MethodInjection(unittest.TestCase):
     def test_transfer_methods_injected_to_client(self):
         session = boto3.session.Session(region_name='us-west-2')
         client = session.client('s3')
-        assert hasattr(client, 'upload_file')
-        assert hasattr(client, 'download_file')
-        assert hasattr(client, 'copy')
+        self.assertTrue(hasattr(client, 'upload_file'),
+                        'upload_file was not injected onto S3 client')
+        self.assertTrue(hasattr(client, 'download_file'),
+                        'download_file was not injected onto S3 client')
+        self.assertTrue(hasattr(client, 'copy'),
+                        'copy was not injected onto S3 client')
 
     def test_bucket_resource_has_load_method(self):
         session = boto3.session.Session(region_name='us-west-2')
         bucket = session.resource('s3').Bucket('fakebucket')
-        assert hasattr(bucket, 'load')
+        self.assertTrue(hasattr(bucket, 'load'),
+                        'load() was not injected onto S3 Bucket resource.')
 
     def test_transfer_methods_injected_to_bucket(self):
         bucket = boto3.resource('s3').Bucket('my_bucket')
-        assert hasattr(bucket, 'upload_file')
-        assert hasattr(bucket, 'download_file')
-        assert hasattr(bucket, 'copy')
+        self.assertTrue(hasattr(bucket, 'upload_file'),
+                        'upload_file was not injected onto S3 bucket')
+        self.assertTrue(hasattr(bucket, 'download_file'),
+                        'download_file was not injected onto S3 bucket')
+        self.assertTrue(hasattr(bucket, 'copy'),
+                        'copy was not injected onto S3 bucket')
 
     def test_transfer_methods_injected_to_object(self):
         obj = boto3.resource('s3').Object('my_bucket', 'my_key')
-        assert hasattr(obj, 'upload_file')
-        assert hasattr(obj, 'download_file')
-        assert hasattr(obj, 'copy')
+        self.assertTrue(hasattr(obj, 'upload_file'),
+                        'upload_file was not injected onto S3 object')
+        self.assertTrue(hasattr(obj, 'download_file'),
+                        'download_file was not injected onto S3 object')
+        self.assertTrue(hasattr(obj, 'copy'),
+                        'copy was not injected onto S3 object')
 
 
 class BaseTransferTest(unittest.TestCase):
@@ -200,7 +208,7 @@ class TestCopy(BaseTransferTest):
             response = self.s3.meta.client.copy(
                 self.copy_source, self.bucket, self.key)
         # The response will be none on a successful transfer.
-        assert response is None
+        self.assertIsNone(response)
 
     def test_bucket_copy(self):
         self.stub_single_part_copy()
@@ -208,14 +216,14 @@ class TestCopy(BaseTransferTest):
         with self.stubber:
             response = bucket.copy(self.copy_source, self.key)
         # The response will be none on a successful transfer.
-        assert response is None
+        self.assertIsNone(response)
 
     def test_object_copy(self):
         self.stub_single_part_copy()
         obj = self.s3.Object(self.bucket, self.key)
         with self.stubber:
             response = obj.copy(self.copy_source)
-        assert response is None
+        self.assertIsNone(response)
 
     def test_copy_progress(self):
         chunksize = 8 * (1024 ** 2)
@@ -235,8 +243,8 @@ class TestCopy(BaseTransferTest):
 
         # Assert that the progress callback was called the correct number of
         # times with the correct amounts.
-        assert self.progress_times_called == 3
-        assert self.progress == chunksize * 3
+        self.assertEqual(self.progress_times_called, 3)
+        self.assertEqual(self.progress, chunksize * 3)
 
 
 class TestUploadFileobj(BaseTransferTest):
@@ -302,7 +310,7 @@ class TestUploadFileobj(BaseTransferTest):
 
     def test_raises_value_error_on_invalid_fileobj(self):
         with self.stubber:
-            with pytest.raises(ValueError):
+            with self.assertRaises(ValueError):
                 self.s3.meta.client.upload_fileobj(
                     Fileobj='foo', Bucket=self.bucket, Key=self.key)
 
@@ -377,7 +385,7 @@ class TestDownloadFileobj(BaseTransferTest):
         # If this is a ranged get, ContentRange needs to be returned,
         # contents needs to be pruned, and Range needs to be an expected param.
         if end_byte is not None:
-            contents = full_contents[start_byte:end_byte + 1]
+            contents = full_contents[start_byte:end_byte+1]
             part_range = 'bytes=%s-%s' % (start_byte, end_byte_range)
             content_range = 'bytes=%s-%s/%s' % (
                 start_byte, end_byte, len(full_contents))
@@ -419,12 +427,12 @@ class TestDownloadFileobj(BaseTransferTest):
             self.s3.meta.client.download_fileobj(
                 Bucket=self.bucket, Key=self.key, Fileobj=self.fileobj)
 
-        assert self.fileobj.getvalue() == self.contents
+        self.assertEqual(self.fileobj.getvalue(), self.contents)
         self.stubber.assert_no_pending_responses()
 
     def test_raises_value_error_on_invalid_fileobj(self):
         with self.stubber:
-            with pytest.raises(ValueError):
+            with self.assertRaises(ValueError):
                 self.s3.meta.client.download_fileobj(
                     Bucket=self.bucket, Key=self.key, Fileobj='foo')
 
@@ -434,7 +442,7 @@ class TestDownloadFileobj(BaseTransferTest):
         with self.stubber:
             bucket.download_fileobj(Key=self.key, Fileobj=self.fileobj)
 
-        assert self.fileobj.getvalue() == self.contents
+        self.assertEqual(self.fileobj.getvalue(), self.contents)
         self.stubber.assert_no_pending_responses()
 
     def test_object_download(self):
@@ -443,7 +451,7 @@ class TestDownloadFileobj(BaseTransferTest):
         with self.stubber:
             obj.download_fileobj(Fileobj=self.fileobj)
 
-        assert self.fileobj.getvalue() == self.contents
+        self.assertEqual(self.fileobj.getvalue(), self.contents)
         self.stubber.assert_no_pending_responses()
 
     def test_multipart_download(self):
@@ -459,7 +467,7 @@ class TestDownloadFileobj(BaseTransferTest):
                 Bucket=self.bucket, Key=self.key, Fileobj=self.fileobj,
                 Config=transfer_config)
 
-        assert self.fileobj.getvalue() == self.contents
+        self.assertEqual(self.fileobj.getvalue(), self.contents)
         self.stubber.assert_no_pending_responses()
 
     def test_download_progress(self):
@@ -481,8 +489,8 @@ class TestDownloadFileobj(BaseTransferTest):
 
         # Assert that the progress callback was called the correct number of
         # times with the correct amounts.
-        assert self.progress_times_called == 11
-        assert self.progress == 55
+        self.assertEqual(self.progress_times_called, 11)
+        self.assertEqual(self.progress, 55)
         self.stubber.assert_no_pending_responses()
 
 
@@ -512,19 +520,19 @@ class TestS3ObjectSummary(unittest.TestCase):
         self.stubber.deactivate()
 
     def test_has_load(self):
-        # Validate load was injected onto ObjectSummary.
-        assert hasattr(self.obj_summary, 'load')
+        self.assertTrue(hasattr(self.obj_summary, 'load'),
+                        'load() was not injected onto ObjectSummary resource.')
 
     def test_autoloads_correctly(self):
         # In HeadObject the parameter returned is ContentLength, this
         # should get mapped to Size of ListObject since the resource uses
         # the shape returned to by ListObjects.
-        assert self.obj_summary.size == self.obj_summary_size
+        self.assertEqual(self.obj_summary.size, self.obj_summary_size)
 
     def test_cannot_access_other_non_related_parameters(self):
         # Even though an HeadObject was used to load this, it should
         # only expose the attributes from its shape defined in ListObjects.
-        assert not hasattr(self.obj_summary, 'content_length')
+        self.assertFalse(hasattr(self.obj_summary, 'content_length'))
 
 
 class TestServiceResource(unittest.TestCase):
@@ -534,5 +542,7 @@ class TestServiceResource(unittest.TestCase):
     def test_unsigned_signature_version_is_not_corrupted(self):
         config = Config(signature_version=botocore.UNSIGNED)
         resource = self.session.resource('s3', config=config)
-        sig_version = resource.meta.client.meta.config.signature_version
-        assert sig_version is botocore.UNSIGNED
+        self.assertIs(
+            resource.meta.client.meta.config.signature_version,
+            botocore.UNSIGNED
+        )

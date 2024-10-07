@@ -9,14 +9,14 @@
    limitations under the License.
    
 ##################
-Access permissions
+Access Permissions
 ##################
 
 This section demonstrates how to manage the access permissions for an S3 
 bucket or object by using an access control list (ACL).
 
 
-Get a bucket access control list
+Get a Bucket Access Control List
 ================================
 
 The example retrieves the current access control list of an S3 bucket.

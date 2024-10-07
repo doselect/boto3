@@ -10,7 +10,7 @@
 
 
 #################
-Amazon S3 buckets
+Amazon S3 Buckets
 #################
 
 An Amazon S3 bucket is a storage location to hold files. S3 files are referred 
@@ -20,7 +20,7 @@ This section describes how to use the AWS SDK for Python to perform common
 operations on S3 buckets.
 
 
-Create an Amazon S3 bucket
+Create an Amazon S3 Bucket
 ==========================
 
 The name of an Amazon S3 bucket must be unique across all regions of the AWS 
@@ -61,7 +61,7 @@ or to address regulatory requirements.
         return True
 
 
-List existing buckets
+List Existing Buckets
 =====================
 
 List all the existing buckets for the AWS account.

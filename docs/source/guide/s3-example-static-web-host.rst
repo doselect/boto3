@@ -10,13 +10,13 @@
 
 
 ##############################################
-Using an Amazon S3 bucket as a static web host
+Using an Amazon S3 Bucket as a Static Web Host
 ##############################################
 
 An S3 bucket can be configured to host a static website.
 
 
-Retrieve a website configuration
+Retrieve a Website Configuration
 ================================
 
 Retrieve a bucket's website configuration by calling the AWS SDK for Python 
@@ -31,7 +31,7 @@ Retrieve a bucket's website configuration by calling the AWS SDK for Python
     result = s3.get_bucket_website(Bucket='BUCKET_NAME')
  
 
-Set a website configuration
+Set a Website Configuration
 ===========================
 
 A bucket's website configuration can be set by calling the 
@@ -52,7 +52,7 @@ A bucket's website configuration can be set by calling the
                           WebsiteConfiguration=website_configuration)
 
 
-Delete a website configuration
+Delete a Website Configuration
 ==============================
 
 A bucket's website configuration can be deleted by calling the 

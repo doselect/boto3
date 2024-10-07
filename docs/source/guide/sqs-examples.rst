@@ -11,7 +11,7 @@
 .. _aws-boto3-sqs-examples:   
 
 ###################
-Amazon SQS examples
+Amazon SQS Examples
 ###################
 
 .. meta::
